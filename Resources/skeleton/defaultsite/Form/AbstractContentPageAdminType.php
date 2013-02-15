@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 /**
  * The admin type for content pages
  */
-class ContentPageAdminType extends AbstractType
+class AbstractContentPageAdminType extends AbstractType
 {
     /**
      * Builds the form.

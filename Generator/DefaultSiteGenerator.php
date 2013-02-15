@@ -212,7 +212,7 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
         $fullSkeletonDir = $this->skeletonDir . '/Form';
 
         try {
-            $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'ContentPageAdminType', $parameters);
+            $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'AbstractContentPageAdminType', $parameters);
         } catch (\Exception $error) {
             $this->output->writeln($this->dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
         }
@@ -239,6 +239,11 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
         $dirPath = sprintf("%s/Entity", $bundle->getPath());
         $fullSkeletonDir = sprintf("%s/Entity", $this->skeletonDir);
 
+        try {
+            $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'AbstractContentPage', $parameters);
+        } catch (\Exception $error) {
+            $this->output->writeln($this->dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
+        }
         try {
             $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'ContentPage', $parameters);
         } catch (\Exception $error) {

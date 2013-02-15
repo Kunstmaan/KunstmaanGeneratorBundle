@@ -217,6 +217,11 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
             $this->output->writeln($this->dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
         }
         try {
+            $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'ContentPageAdminType', $parameters);
+        } catch (\Exception $error) {
+            $this->output->writeln($this->dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
+        }
+        try {
             $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'FormPageAdminType', $parameters);
         } catch (\Exception $error) {
             $this->output->writeln($this->dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));

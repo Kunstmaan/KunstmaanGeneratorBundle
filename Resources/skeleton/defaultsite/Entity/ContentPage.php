@@ -5,6 +5,7 @@ namespace {{ namespace }}\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use {{ namespace }}\Entity\AbstractContentPage;
+use {{ namespace }}\Form\ContentPageAdminType;
 
 /**
  * ContentPage
@@ -14,5 +15,15 @@ use {{ namespace }}\Entity\AbstractContentPage;
  */
 class ContentPage extends AbstractContentPage
 {
+
+    /**
+     * Returns the default backend form type for this page
+     *
+     * @return AbstractType
+     */
+    public function getDefaultAdminType()
+    {
+        return new ContentPageAdminType();
+    }
 
 }

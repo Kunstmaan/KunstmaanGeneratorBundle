@@ -4,7 +4,6 @@ namespace {{ namespace }}\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use {{ namespace }}\Entity\AbstractContentPage;
 use {{ namespace }}\Form\ContentPageAdminType;
 
 /**

@@ -87,8 +87,8 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
 
         $this->renderFile($fullSkeletonDir, '/Page/layout.html.twig', $dirPath . '/Resources/views/Page/layout.html.twig', $parameters);
 
-        $this->filesystem->copy($fullSkeletonDir . '/ContentPage/view.html.twig', $dirPath . '/Resources/views/ContentPage/view.html.twig', true);
-        GeneratorUtils::prepend("{% extends '" . $bundle->getName() .":Page:layout.html.twig' %}\n", $dirPath . '/Resources/views/ContentPage/view.html.twig');
+        $this->filesystem->copy($fullSkeletonDir . '/AbstractContentPage/view.html.twig', $dirPath . '/Resources/views/AbstractContentPage/view.html.twig', true);
+        GeneratorUtils::prepend("{% extends '" . $bundle->getName() .":Page:layout.html.twig' %}\n", $dirPath . '/Resources/views/AbstractContentPage/view.html.twig');
 
         $this->filesystem->copy($fullSkeletonDir . '/Form/fields.html.twig', $dirPath . '/Resources/views/Form/fields.html.twig', true);
 
@@ -199,7 +199,7 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
             $this->output->writeln($this->dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
         }
         try {
-            $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'ContentPagePagePartAdminConfigurator', $parameters);
+            $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'AbstractContentPagePagePartAdminConfigurator', $parameters);
         } catch (\Exception $error) {
             $this->output->writeln($this->dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
         }

@@ -13,7 +13,7 @@ use Kunstmaan\PagePartBundle\Helper\HasPagePartsInterface;
 use Kunstmaan\PagePartBundle\PagePartAdmin\AbstractPagePartAdminConfigurator;
 use {{ namespace }}\Form\AbstractContentPageAdminType;
 use {{ namespace }}\PagePartAdmin\BannerPagePartAdminConfigurator;
-use {{ namespace }}\PagePartAdmin\ContentPagePagePartAdminConfigurator;
+use {{ namespace }}\PagePartAdmin\AbstractContentPagePagePartAdminConfigurator;
 
 /**
  * An abstract ContentPage class which holds the standard configuration for content pages
@@ -53,7 +53,7 @@ class AbstractContentPage extends AbstractPage implements HasPagePartsInterface
      */
     public function getPagePartAdminConfigurations()
     {
-        return array(new ContentPagePagePartAdminConfigurator(), new BannerPagePartAdminConfigurator());
+        return array(new AbstractContentPagePagePartAdminConfigurator(), new BannerPagePartAdminConfigurator());
     }
 
     /**
@@ -61,6 +61,6 @@ class AbstractContentPage extends AbstractPage implements HasPagePartsInterface
      */
     public function getDefaultView()
     {
-        return "{{ bundle.getName() }}:ContentPage:view.html.twig";
+        return "{{ bundle.getName() }}:AbstractContentPage:view.html.twig";
     }
 }

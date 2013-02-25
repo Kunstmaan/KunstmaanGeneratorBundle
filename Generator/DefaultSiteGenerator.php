@@ -7,7 +7,6 @@ use Kunstmaan\GeneratorBundle\Helper\GeneratorUtils;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\DependencyInjection\Container;
 
 use Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
 
@@ -52,9 +51,9 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
     }
 
     /**
-     * @param Bundle          $bundle  The bundle
-     * @param string          $prefix  The prefix
-     * @param string          $rootDir The root directory
+     * @param Bundle    $bundle  The bundle
+     * @param string    $prefix  The prefix
+     * @param string    $rootDir The root directory
      */
     public function generate(Bundle $bundle, $prefix, $rootDir)
     {
@@ -73,9 +72,9 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
     }
 
     /**
-     * @param Bundle          $bundle     The bundle
-     * @param array           $parameters The template parameters
-     * @param string          $rootDir    The root directory
+     * @param Bundle    $bundle     The bundle
+     * @param array     $parameters The template parameters
+     * @param string    $rootDir    The root directory
      */
     public function generateTemplates(Bundle $bundle, array $parameters, $rootDir)
     {
@@ -87,8 +86,8 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
 
         $this->renderFile($fullSkeletonDir, '/Page/layout.html.twig', $dirPath . '/Resources/views/Page/layout.html.twig', $parameters);
 
-        $this->filesystem->copy($fullSkeletonDir . '/ContentPage/view.html.twig', $dirPath . '/Resources/views/ContentPage/view.html.twig', true);
-        GeneratorUtils::prepend("{% extends '" . $bundle->getName() .":Page:layout.html.twig' %}\n", $dirPath . '/Resources/views/ContentPage/view.html.twig');
+        $this->filesystem->copy($fullSkeletonDir . '/AbstractContentPage/view.html.twig', $dirPath . '/Resources/views/AbstractContentPage/view.html.twig', true);
+        GeneratorUtils::prepend("{% extends '" . $bundle->getName() .":Page:layout.html.twig' %}\n", $dirPath . '/Resources/views/AbstractContentPage/view.html.twig');
 
         $this->filesystem->copy($fullSkeletonDir . '/Form/fields.html.twig', $dirPath . '/Resources/views/Form/fields.html.twig', true);
 
@@ -119,9 +118,9 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
     }
 
     /**
-     * @param Bundle          $bundle     The bundle
-     * @param array           $parameters The template parameters
-     * @param string          $rootDir    The root directory
+     * @param Bundle    $bundle     The bundle
+     * @param array     $parameters The template parameters
+     * @param string    $rootDir    The root directory
      */
     public function generateErrorTemplates(Bundle $bundle, array $parameters, $rootDir)
     {
@@ -163,8 +162,8 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
     }
 
     /**
-     * @param Bundle          $bundle     The bundle
-     * @param array           $parameters The template parameters
+     * @param Bundle    $bundle     The bundle
+     * @param array     $parameters The template parameters
      *
      * @throws \RuntimeException
      */
@@ -183,8 +182,8 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
     }
 
     /**
-     * @param Bundle          $bundle     The bundle
-     * @param array           $parameters The template parameters
+     * @param Bundle    $bundle     The bundle
+     * @param array     $parameters The template parameters
      *
      * @throws \RuntimeException
      */
@@ -199,7 +198,7 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
             $this->output->writeln($this->dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
         }
         try {
-            $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'ContentPagePagePartAdminConfigurator', $parameters);
+            $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'AbstractContentPagePagePartAdminConfigurator', $parameters);
         } catch (\Exception $error) {
             $this->output->writeln($this->dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
         }
@@ -221,8 +220,8 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
     }
 
     /**
-     * @param Bundle          $bundle     The bundle
-     * @param array           $parameters The template parameters
+     * @param Bundle    $bundle     The bundle
+     * @param array     $parameters The template parameters
      *
      * @throws \RuntimeException
      */
@@ -231,6 +230,11 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
         $dirPath = $bundle->getPath() . '/Form';
         $fullSkeletonDir = $this->skeletonDir . '/Form';
 
+        try {
+            $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'AbstractContentPageAdminType', $parameters);
+        } catch (\Exception $error) {
+            $this->output->writeln($this->dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
+        }
         try {
             $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'ContentPageAdminType', $parameters);
         } catch (\Exception $error) {
@@ -251,14 +255,19 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
     }
 
     /**
-     * @param Bundle          $bundle     The bundle
-     * @param array           $parameters The template parameters
+     * @param Bundle    $bundle     The bundle
+     * @param array     $parameters The template parameters
      */
     public function generateEntities(Bundle $bundle, array $parameters)
     {
         $dirPath = sprintf("%s/Entity", $bundle->getPath());
         $fullSkeletonDir = sprintf("%s/Entity", $this->skeletonDir);
 
+        try {
+            $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'AbstractContentPage', $parameters);
+        } catch (\Exception $error) {
+            $this->output->writeln($this->dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
+        }
         try {
             $this->generateSkeletonBasedClass($fullSkeletonDir, $dirPath, 'ContentPage', $parameters);
         } catch (\Exception $error) {

@@ -2,11 +2,7 @@
 
 namespace {{ namespace }}\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Kunstmaan\NodeBundle\Entity\AbstractPage;
 use Kunstmaan\PagePartBundle\Helper\HasPagePartsInterface;
@@ -63,4 +59,5 @@ class AbstractContentPage extends AbstractPage implements HasPagePartsInterface
     {
         return "{{ bundle.getName() }}:AbstractContentPage:view.html.twig";
     }
+
 }

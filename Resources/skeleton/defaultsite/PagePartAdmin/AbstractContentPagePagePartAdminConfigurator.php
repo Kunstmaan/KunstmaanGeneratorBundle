@@ -4,7 +4,7 @@ namespace {{ namespace }}\PagePartAdmin;
 
 use Kunstmaan\PagePartBundle\PagePartAdmin\AbstractPagePartAdminConfigurator;
 
-class ContentPagePagePartAdminConfigurator extends AbstractPagePartAdminConfigurator
+class AbstractContentPagePagePartAdminConfigurator extends AbstractPagePartAdminConfigurator
 {
 
     /**

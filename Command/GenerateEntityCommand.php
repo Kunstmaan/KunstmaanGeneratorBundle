@@ -16,8 +16,6 @@ use Doctrine\DBAL\Types\Type;
 class GenerateEntityCommand extends GenerateDoctrineCommand
 {
 
-    private $generator;
-
     protected function configure()
     {
         $this
@@ -83,7 +81,7 @@ EOT
 
         $bundle = $this->getContainer()->get('kernel')->getBundle($bundleName);
 
-        $generator = $this->getGenerator();
+        $generator = $this->getGenerator($this->getApplication()->getKernel()->getBundle("KunstmaanGeneratorBundle"));
         $generator->generate($bundle, $entity, $format, array_values($fields), $input->getOption('with-repository'));
 
         $output->writeln('Generating the entity code: <info>OK</info>');
@@ -289,27 +287,8 @@ EOT
         return $fields;
     }
 
-    public function getGenerator()
+    protected function createGenerator()
     {
-        if (null === $this->generator) {
-            $this->generator = new DoctrineEntityGenerator($this->getContainer()->get('filesystem'), $this->getContainer()->get('doctrine'));
-        }
-
-        return $this->generator;
-    }
-
-    public function setGenerator(DoctrineEntityGenerator $generator)
-    {
-        $this->generator = $generator;
-    }
-
-    protected function getDialogHelper()
-    {
-        $dialog = $this->getHelperSet()->get('dialog');
-        if (!$dialog || get_class($dialog) !== 'Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper') {
-            $this->getHelperSet()->set($dialog = new DialogHelper());
-        }
-
-        return $dialog;
+        return new DoctrineEntityGenerator($this->getContainer()->get('filesystem'), $this->getContainer()->get('doctrine'));
     }
 }

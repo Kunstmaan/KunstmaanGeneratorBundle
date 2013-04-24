@@ -2,18 +2,15 @@
 
 namespace Kunstmaan\GeneratorBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Sensio\Bundle\GeneratorBundle\Command\GeneratorCommand;
 use Kunstmaan\GeneratorBundle\Generator\AdminTestsGenerator;
 use Symfony\Component\Console\Input\InputOption;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
-use Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 
-class GenerateAdminTestsCommand extends ContainerAwareCommand
+class GenerateAdminTestsCommand extends GeneratorCommand
 {
-
-    private $generator;
 
     protected function configure()
     {
@@ -53,9 +50,9 @@ EOT
             ->getKernel()
             ->getBundle($bundle);
         $dialog->writeSection($output, 'Admin Tests Generation');
-        $rootDir = $this->getApplication()->getKernel()->getRootDir();
 
-        $this->getGenerator($output, $dialog)->generate($bundle, $rootDir);
+        $generator = $this->getGenerator($this->getApplication()->getKernel()->getBundle("KunstmaanGeneratorBundle"));
+        $generator->generate($bundle, $output);
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
@@ -85,39 +82,8 @@ EOT
         }
     }
 
-    /**
-     * @return DialogHelper
-     */
-    protected function getDialogHelper()
+    protected function createGenerator()
     {
-        $dialog = $this
-            ->getHelperSet()
-            ->get('dialog');
-        if (!$dialog || get_class($dialog) !== 'Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper') {
-            $this
-                ->getHelperSet()
-                ->set($dialog = new DialogHelper());
-        }
-
-        return $dialog;
-    }
-
-    protected function getGenerator(OutputInterface $output, DialogHelper $dialog)
-    {
-        if (null === $this->generator) {
-            $this->generator = new AdminTestsGenerator($this
-                ->getContainer()
-                ->get('filesystem'), __DIR__ . '/../Resources/skeleton/admintests', $output, $dialog);
-        }
-
-        return $this->generator;
-    }
-
-    /**
-     * @param AdminTestsGenerator generator
-     */
-    public function setSiteGenerator(AdminTestsGenerator $generator)
-    {
-        $this->generator = $generator;
+       return new AdminTestsGenerator($this->getContainer()->get('filesystem'), __DIR__ . '/../Resources/skeleton/admintests');
     }
 }

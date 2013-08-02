@@ -96,7 +96,8 @@ class DefaultSiteGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Gene
         $dirPath = $bundle->getPath();
         $fullSkeletonDir = $this->skeletonDir . '/Features';
 
-        $this->filesystem->copy($fullSkeletonDir . '/homepage.feature', $dirPath . '/Features/homepage.feature', true);
+        //This needs to be done correctly using the generate:admin-tests. See the master and 2.3 branch
+        //$this->filesystem->copy($fullSkeletonDir . '/homepage.feature', $dirPath . '/Features/homepage.feature', true);
 
         $this->output->writeln('Generating Behat Tests : <info>OK</info>');
     }

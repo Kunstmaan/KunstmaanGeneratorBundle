@@ -4,8 +4,11 @@ namespace {{ namespace }}\Features\Context;
 
 use Kunstmaan\BehatBundle\Features\Context\FeatureContext as AbstractContext;
 use Behat\Behat\Context\Step;
-use Behat\Mink\Selector\CssSelector;
+use Behat\Mink\Element\Element;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ResponseTextException;
+use Behat\Mink\Exception\ExpectationException;
+use Behat\Mink\Selector\CssSelector;
 
 /**
  * FeatureContext
@@ -68,8 +71,8 @@ class FeatureContext extends AbstractContext
     public function iTryToLogInWith($username, $password)
     {
         return array(
-            new Step\Given("I am on \"/en/admin\""),
-            new Step\Given("I wait 2 seconds"),
+            new Step\Given("I am on \"".$this->lang."/admin\""),
+            new Step\Given("I wait 1 seconds"),
             new Step\Given("I press \"×\" if present"),
             new Step\Given("I fill in \"username\" with \"". $username . "\""),
             new Step\Given("I fill in \"password\" with \"" . $password . "\""),
@@ -84,8 +87,7 @@ class FeatureContext extends AbstractContext
     {
         $this->iAmOnASpecificPage('dashboard');
         $this->makeWide();
-        $logoutButton = $this->getSession()->getPage()->find('xpath', '//a[text()="Logout"]');
-        $logoutButton->click();
+        $this->findAndClickButton($this->getSession()->getPage(), 'xpath', '//a[text()="Logout"]');
     }
 
     /**
@@ -206,10 +208,10 @@ class FeatureContext extends AbstractContext
         $page = $this->getSession()->getPage();
 
         $td = $page->find('xpath', '//div[@class="content"]//table//td[text()="' . $name . '"]');
-        $tr = $td->getParent();
-        $deleteLink = $tr->find('xpath', '//a[text()="' . $action . '"]');
-
-        $deleteLink->click();
+        if (!is_null($td)) {
+            $tr = $td->getParent();
+            $this->findAndClickButton($tr, 'xpath', '//a[text()="' . $action . '"]');
+        }
     }
 
     /**
@@ -306,6 +308,27 @@ class FeatureContext extends AbstractContext
         if (!(preg_match($regex1, $actual) || preg_match($regex2, $actual))) {
             $message = sprintf('The text "%s" was not found anywhere in the text of the current page.', $text2);
             throw new ResponseTextException($message, $this->getSession());
+        }
+    }
+
+    /**
+     * Finds an element with specified selector and clicks it.
+     *
+     * @param Element $element  the element
+     * @param string  $selector selector engine name e.g. xpath
+     * @param string  $locator  selector locator
+     *
+     * @return array
+     * @throws ExpectationException
+     */
+    public function findAndClickButton($element, $selector, $locator)
+    {
+        $button = $element->find($selector, $locator);
+        if (!is_null($button)) {
+            $button->click();
+        } else {
+            $message = sprintf('The button was not found');
+            throw new ExpectationException($message, $this->getSession());
         }
     }
 

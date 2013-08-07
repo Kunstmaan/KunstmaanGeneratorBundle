@@ -83,8 +83,9 @@ class AdminTestsGenerator extends  Generator
         $dirPath = $bundle->getPath();
         $fullSkeletonDir = $this->skeletonDir . '/Features';
 
-        $this->filesystem->copy($fullSkeletonDir . '/AdminLogin.feature', $dirPath . '/Features/AdminLogin.feature', true);
-        $this->filesystem->copy($fullSkeletonDir . '/AdminLogin.feature', $dirPath . '/Features/AdminSettingsUser.feature', true);
+        //These tests need to be rewritten. Check master and 2.3 branch
+        //$this->filesystem->copy($fullSkeletonDir . '/AdminLogin.feature', $dirPath . '/Features/AdminLogin.feature', true);
+        //$this->filesystem->copy($fullSkeletonDir . '/AdminLogin.feature', $dirPath . '/Features/AdminSettingsUser.feature', true);
 
         $this->output->writeln('Generating Behat Tests : <info>OK</info>');
     }

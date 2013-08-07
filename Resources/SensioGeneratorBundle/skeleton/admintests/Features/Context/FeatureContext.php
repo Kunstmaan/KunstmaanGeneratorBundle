@@ -6,6 +6,8 @@ use Kunstmaan\BehatBundle\Features\Context\FeatureContext as AbstractContext;
 use Behat\Behat\Context\Step;
 use Behat\Mink\Selector\CssSelector;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ResponseTextException;
+use Behat\Mink\Exception\ExpectationException;
 
 /**
  * FeatureContext
@@ -68,8 +70,8 @@ class FeatureContext extends AbstractContext
     public function iTryToLogInWith($username, $password)
     {
         return array(
-            new Step\Given("I am on \"/en/admin\""),
-            new Step\Given("I wait 2 seconds"),
+            new Step\Given("I am on \"".$this->lang."/admin\""),
+            new Step\Given("I wait 1 seconds"),
             new Step\Given("I press \"×\" if present"),
             new Step\Given("I fill in \"username\" with \"". $username . "\""),
             new Step\Given("I fill in \"password\" with \"" . $password . "\""),
@@ -85,7 +87,12 @@ class FeatureContext extends AbstractContext
         $this->iAmOnASpecificPage('dashboard');
         $this->makeWide();
         $logoutButton = $this->getSession()->getPage()->find('xpath', '//a[text()="Logout"]');
-        $logoutButton->click();
+        if (!is_null($logoutButton)) {
+            $logoutButton->click();
+        } else {
+            $message = sprintf('The logout button was not found');
+            throw new ExpectationException($message, $this->getSession());
+        }
     }
 
     /**
@@ -195,6 +202,8 @@ class FeatureContext extends AbstractContext
      * @param string $name     the name of the a tag
      * @param string $action   the action you want to perform - delete, edit
      * @param string $pageName the name of the page
+     *
+     * @throws ExpectationException
      */
     public function clickAction($name, $action, $pageName)
     {
@@ -206,10 +215,15 @@ class FeatureContext extends AbstractContext
         $page = $this->getSession()->getPage();
 
         $td = $page->find('xpath', '//div[@class="content"]//table//td[text()="' . $name . '"]');
-        $tr = $td->getParent();
-        $deleteLink = $tr->find('xpath', '//a[text()="' . $action . '"]');
+        if (!is_null($td)) {
+            $tr = $td->getParent();
+            $deleteLink = $tr->find('xpath', '//a[text()="' . $action . '"]');
 
-        $deleteLink->click();
+            $deleteLink->click();
+        } else {
+            $message = sprintf('Expected "%s" was not found anywhere on the current page.', $name);
+            throw new ExpectationException($message, $this->getSession());
+        }
     }
 
     /**

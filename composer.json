@@ -12,7 +12,7 @@
             "email": "support@kunstmaan.be"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": ">=2.3.0,<2.4.0",
@@ -21,13 +21,13 @@
         "fzaninotto/faker": "1.2.0"
     },
     "suggest": {
-        "kunstmaan/admin-bundle": "dev-master",
-        "kunstmaan/adminlist-bundle": "dev-master",
-        "kunstmaan/form-bundle": "dev-master",
-        "kunstmaan/media-bundle": "dev-master",
-        "kunstmaan/media-pagepart-bundle": "dev-master",
-        "kunstmaan/node-bundle": "dev-master",
-        "kunstmaan/pagepart-bundle": "dev-master"
+        "kunstmaan/admin-bundle": "2.3.*",
+        "kunstmaan/adminlist-bundle": "2.3.*",
+        "kunstmaan/form-bundle": "2.3.*",
+        "kunstmaan/media-bundle": "2.3.*",
+        "kunstmaan/media-pagepart-bundle": "2.3.*",
+        "kunstmaan/node-bundle": "2.3.*",
+        "kunstmaan/pagepart-bundle": "2.3.*"
     },
     "autoload": {
         "psr-0": { "Kunstmaan\\GeneratorBundle": "" }

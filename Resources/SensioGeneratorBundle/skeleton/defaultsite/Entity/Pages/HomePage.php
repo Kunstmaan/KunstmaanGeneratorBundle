@@ -3,7 +3,6 @@
 namespace {{ namespace }}\Entity\Pages;
 
 use {{ namespace }}\Form\Pages\HomePageAdminType;
-use {{ namespace }}\PagePartAdmin\HomePagePagePartAdminConfigurator;
 
 use Doctrine\ORM\Mapping as ORM;
 use Kunstmaan\NodeBundle\Entity\AbstractPage;
@@ -51,7 +50,7 @@ class HomePage extends AbstractPage  implements HasPageTemplateInterface
      */
     public function getPagePartAdminConfigurations()
     {
-        return array("{{ bundle.getName() }}:main", "{{ bundle.getName() }}:banners", "{{ bundle.getName() }}:footer");
+        return array("{{ bundle.getName() }}:main", "{{ bundle.getName() }}:slider", "{{ bundle.getName() }}:banners", "{{ bundle.getName() }}:footer");
     }
 
     /**

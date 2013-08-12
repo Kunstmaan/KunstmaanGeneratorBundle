@@ -3,7 +3,7 @@
 namespace Kunstmaan\GeneratorBundle\Generator;
 
 use Kunstmaan\GeneratorBundle\Helper\GeneratorUtils;
-
+use Sensio\Bundle\GeneratorBundle\Generator\Generator;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -11,7 +11,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Generates an Article section
  */
-class ArticleGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Generator
+class ArticleGenerator extends Generator
 {
 
     /**
@@ -24,32 +24,42 @@ class ArticleGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Generato
      */
     private $skeletonDir;
 
+    /**
+     * @var string
+     */
     private $fullSkeletonDir;
 
     /**
-     * @param Filesystem $filesystem  The filesytem
-     * @param string     $skeletonDir The skeleton directory
-
+     * @var bool
      */
-    public function __construct(Filesystem $filesystem, $skeletonDir)
+    private $multilanguage;
+
+    /**
+     * @param Filesystem $filesystem    The filesytem
+     * @param string     $skeletonDir   The skeleton directory
+     * @param bool       $multilanguage If the site is multilanguage
+     */
+    public function __construct(Filesystem $filesystem, $skeletonDir, $multilanguage)
     {
         $this->filesystem = $filesystem;
         $this->skeletonDir = $skeletonDir;
         $this->fullSkeletonDir = __DIR__.'/../Resources/SensioGeneratorBundle/skeleton' . $skeletonDir;
+        $this->multilanguage = $multilanguage;
     }
 
     /**
      * @param Bundle          $bundle The bundle
      * @param string          $entity
      * @param string          $prefix The prefix
+     * @param bool            $dummydata
      * @param OutputInterface $output
      */
-    public function generate(Bundle $bundle, $entity, $prefix, OutputInterface $output)
+    public function generate(Bundle $bundle, $entity, $prefix, $dummydata, OutputInterface $output)
     {
         $parameters = array(
             'namespace'         => $bundle->getNamespace(),
             'bundle'            => $bundle,
-            'prefix'            => $prefix,
+            'prefix'            => GeneratorUtils::cleanPrefix($prefix),
             'entity_class'      => $entity,
         );
 
@@ -63,7 +73,9 @@ class ArticleGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Generato
         $this->generateRouting($bundle, $entity, $parameters, $output);
         $this->generateMenu($bundle, $entity, $parameters, $output);
         $this->generateServices($bundle, $entity, $parameters, $output);
-
+        if ($dummydata) {
+            $this->generateFixtures($bundle, $entity, $parameters, $output);
+        }
     }
 
     /**
@@ -114,7 +126,11 @@ class ArticleGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Generato
     {
         $dirPath = sprintf("%s/Resources/config", $bundle->getPath());
         $skeletonDir = sprintf("%s/Resources/config", $this->skeletonDir);
-        $routing = $this->render($skeletonDir . '/routing.yml', $parameters);
+        if($this->multilanguage) {
+            $routing = $this->render($skeletonDir . '/routing_multilanguage.yml', $parameters);
+        } else {
+            $routing = $this->render($skeletonDir . '/routing_singlelanguage.yml', $parameters);
+        }
         GeneratorUtils::append($routing, $dirPath . '/routing.yml');
 
         $output->writeln('Generating routing : <info>OK</info>');
@@ -325,6 +341,28 @@ class ArticleGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Generato
         }
 
         $output->writeln('Generating entities : <info>OK</info>');
+    }
+
+    /**
+     * @param Bundle          $bundle     The bundle
+     * @param string          $entity     The name of the entity
+     * @param array           $parameters The template parameters
+     * @param OutputInterface $output
+     *
+     * @throws \RuntimeException
+     */
+    public function generateFixtures(Bundle $bundle, $entity, array $parameters, OutputInterface $output)
+    {
+        $dirPath = $bundle->getPath() . '/DataFixtures/ORM';
+        $skeletonDir = $this->skeletonDir . '/DataFixtures/ORM';
+
+        try {
+            $this->generateSkeletonBasedClass($skeletonDir, $entity, $dirPath, 'ArticleFixtures', $parameters);
+        } catch (\Exception $error) {
+            throw new \RuntimeException($error->getMessage());
+        }
+
+        $output->writeln('Generating fixtures : <info>OK</info>');
     }
 
     /**

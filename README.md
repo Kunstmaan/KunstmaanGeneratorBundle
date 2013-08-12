@@ -20,8 +20,6 @@ Generate an Entity based on the [KunstmaanAdminBundle](https://github.com/Kunstm
 app/console kuma:generate:entity
 ```
 
-```
-
 Generate a [KunstmaanAdminList](https://github.com/Kunstmaan/KunstmaanAdminListBundle) for an Entity :
 
 ```
@@ -34,6 +32,7 @@ Generate a default website using the Kunstmaan bundles :
 
 ```
 app/console kuma:generate:default-site --namespace=Namespace\NamedBundle --prefix=tableprefix_
+```
 
 #### Search page
 
@@ -49,6 +48,14 @@ Generate an overview page with article pages. The overview page contains a pagin
 
 ```
 app/console kuma:generate:article --namespace=Namespace\NamedBundle --entity=Entity --prefix=tableprefix_
+```
+
+#### PagePart
+
+Generate a new page part page based on the [KunstmaanPagePartBundle](https://github.com/Kunstmaan/KunstmaanPagePartBundle) :
+
+```
+app/console kuma:generate:pagepart --prefix=tableprefix_
 ```
 
 ## More

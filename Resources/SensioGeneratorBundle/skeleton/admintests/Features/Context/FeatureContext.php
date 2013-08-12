@@ -19,11 +19,22 @@ class FeatureContext extends AbstractContext
 {
 
     /**
+     * The language to prefix the url with e.g. /en/admin
+     *
+     * @var string
+     */
+    private $lang;
+
+    /**
      * @param array $parameters
      */
     public function __construct(array $parameters)
     {
         $this->parameters = $parameters;
+
+        if ($this->parameters['language'] === 'multi') {
+            $this->lang = "/en";
+        }
 
         // Load Context Class
         $this->useContext('group_context', new GroupContext($parameters));
@@ -134,6 +145,20 @@ class FeatureContext extends AbstractContext
     /**
      * @param string $pageName
      *
+     * @Given /^(?:|I )am on page "(?P<page>[^"]+)"$/
+     * @When /^(?:|I )go to page "(?P<page>[^"]+)"$/
+     */
+    public function goToPage($pageName)
+    {
+        if (!empty($this->lang) && strncmp($pageName, "/", strlen("/"))) {
+            $pageName = "/".$pageName;
+        }
+        $this->getSession()->visit($this->locatePath($this->lang.$pageName));
+    }
+
+    /**
+     * @param string $pageName
+     *
      * @Given /^I (?:am on|go to) the (.*) page$/
      */
     public function iAmOnASpecificPage($pageName)
@@ -150,28 +175,28 @@ class FeatureContext extends AbstractContext
     public function getPageUrlForPageName($pageName)
     {
         $pages = array(
-            "forgot password" => "/en/resetting/request",
-            "users" => "/en/admin/settings/users",
-            "create new user" => "/en/admin/settings/users/add",
-            "groups" => "/en/admin/settings/groups",
-            "create new group" => "/en/admin/settings/groups/add",
-            "roles" => "en/admin/settings/roles",
-            "create new role" => "en/admin/settings/roles/add",
-            "dashboard" => "/en/admin",
-            "login" => "/en/login",
-            "media" => "/en/admin/media/folder/1",
-            "add new image" => "/en/admin/media/create/2/file",
-            "image" => "en/admin/media/folder/2",
-            "add new video" => "en/admin/media/create/3/video",
-            "video" => "en/admin/media/folder/3",
-            "add new slide" => "en/admin/media/create/4/slide",
-            "slide" => "en/admin/media/folder/4",
-            "add new file" => "en/admin/media/create/5/file",
-            "file" => "en/admin/media/folder/5",
-            "bulkupload" => "/en/admin/media/bulkupload/1",
-            "admin home" => "/en/admin/nodes/1",
-            "home" => "/en/admin/nodes/1",
-            "pages" => "/en/admin/nodes"
+            "forgot password" => $this->lang."/resetting/request",
+            "users" => $this->lang."/admin/settings/users",
+            "create new user" => $this->lang."/admin/settings/users/add",
+            "groups" => $this->lang."/admin/settings/groups",
+            "create new group" => $this->lang."/admin/settings/groups/add",
+            "roles" => $this->lang."/admin/settings/roles",
+            "create new role" => $this->lang."/admin/settings/roles/add",
+            "dashboard" => $this->lang."/admin",
+            "login" => $this->lang."/login",
+            "media" => $this->lang."/admin/media/folder/1",
+            "add new image" => $this->lang."/admin/media/create/2/file",
+            "image" => $this->lang."/admin/media/folder/2",
+            "add new video" => $this->lang."/admin/media/create/3/video",
+            "video" => $this->lang."/admin/media/folder/3",
+            "add new slide" => $this->lang."/admin/media/create/4/slide",
+            "slide" => $this->lang."/admin/media/folder/4",
+            "add new file" => $this->lang."/admin/media/create/5/file",
+            "file" => $this->lang."/admin/media/folder/5",
+            "bulkupload" => $this->lang."/admin/media/bulkupload/1",
+            "admin home" => $this->lang."/admin/nodes/1",
+            "home" => $this->lang."/admin/nodes/1",
+            "pages" => $this->lang."/admin/nodes"
         );
 
         return $pages[$pageName];

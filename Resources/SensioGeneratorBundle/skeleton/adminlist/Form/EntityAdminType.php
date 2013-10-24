@@ -8,7 +8,8 @@ use Symfony\Component\Form\AbstractType;
 /**
  * The type for {{ entity_class }}
  */
-class {{ entity_class }}AdminType extends AbstractType {
+class {{ entity_class }}AdminType extends AbstractType
+{
 
     /**
      * Builds the form.
@@ -35,7 +36,7 @@ class {{ entity_class }}AdminType extends AbstractType {
      */
     public function getName()
     {
-        return "{{ entity_class|lower }}_form";
+        return '{{ entity_class|lower }}_form';
     }
 
 }

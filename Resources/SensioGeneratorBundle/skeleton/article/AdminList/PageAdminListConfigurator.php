@@ -19,7 +19,7 @@ class {{ entity_class }}PageAdminListConfigurator extends AbstractArticlePageAdm
      */
     public function getBundleName()
     {
-        return "{{ bundle.getName() }}";
+        return '{{ bundle.getName() }}';
     }
 
     /**
@@ -29,7 +29,7 @@ class {{ entity_class }}PageAdminListConfigurator extends AbstractArticlePageAdm
      */
     public function getEntityName()
     {
-        return "{{ entity_class }}\\{{ entity_class }}Page";
+        return '{{ entity_class }}\{{ entity_class }}Page';
     }
 
     /**
@@ -46,16 +46,16 @@ class {{ entity_class }}PageAdminListConfigurator extends AbstractArticlePageAdm
      * @return \Doctrine\ORM\EntityRepository
      */
     public function getOverviewPageRepository()
-{
-    return $this->em->getRepository('{{ bundle.getName() }}:{{ entity_class }}\{{ entity_class }}OverviewPage');
-}
+    {
+        return $this->em->getRepository('{{ bundle.getName() }}:{{ entity_class }}\{{ entity_class }}OverviewPage');
+    }
 
     /**
      * @return string
      */
     public function getListTemplate()
-{
-    return '{{ bundle.getName() }}:AdminList/{{ entity_class }}/{{ entity_class }}PageAdminList:list.html.twig';
-}
+    {
+        return '{{ bundle.getName() }}:AdminList/{{ entity_class }}/{{ entity_class }}PageAdminList:list.html.twig';
+    }
 
 }

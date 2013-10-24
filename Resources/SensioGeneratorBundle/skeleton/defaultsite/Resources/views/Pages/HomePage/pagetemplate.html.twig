@@ -1,32 +1,20 @@
-<div class="row-fluid">
-    <div class="span9">
-        {{ render_pageparts(page, 'main') }}
+<div class="container">
+    <% if demosite %>
+    <div class="row">
+        <div class="col-md-12">
+            {% include '<%= bundle.name %>:Pages:HomePage/slider.html.twig' %}
+        </div>
     </div>
-    <div class="span9">
-        <section class="slider-pp slider-pp--left">
-            <nav class="slider-pp__thumbs js-thumbs">
-                <div class="slider-pp__thumbs-wrapper">
-                    {% set pps = getpageparts(page, 'slider') %}
-                    {% for pp in pps %}
-                        <div class="slider-pp__thumbs--item js-thumbs--item">
-                            <p>{% if pp.tickText is not empty %}{{ pp.tickText }}{% endif %}</p>
-                        </div>
-                    {% endfor %}
-                </div>
-            </nav>
-            <div class="slider-pp__flexslider js-flexslider flexslider">
-                <ul class="slides">
-                    {{ render_pageparts(page, 'slider') }}
-                </ul>
-            </div>
-        </section>
-    </div>
-    <div class="span3">
-        {{ render_pageparts(page, 'banners') }}
-    </div>
-</div>
-<div class="row-fluid">
-    <div class="span12">
-        {{ render_pageparts(page, 'footer') }}
+    <% endif %>
+    <div class="row row--padded-large">
+        <div class="col-md-4 col--padded">
+            {{ render_pageparts(page, 'left_column') }}
+        </div>
+        <div class="col-md-4 col--padded">
+            {{ render_pageparts(page, 'middle_column') }}
+        </div>
+        <div class="col-md-4 col--padded">
+            {{ render_pageparts(page, 'right_column') }}
+        </div>
     </div>
 </div>

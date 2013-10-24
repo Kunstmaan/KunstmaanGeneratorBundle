@@ -273,7 +273,12 @@ class FeatureContext extends AbstractContext
                     $this->getSession(), 'form field', 'id|name|label|value', $field
                 );
             }
-            $filterField->setValue($value);
+            //Check to see if we need to select an option or fill in a value.
+            if ('select' !== $filterField->getTagName()) {
+                $filterField->setValue($value);
+            } else {
+                $filterField->selectOption($value);
+            }
         }
     }
 
@@ -348,6 +353,8 @@ class FeatureContext extends AbstractContext
      */
     public function findAndClickButton($element, $selector, $locator)
     {
+        //Wait for the button to be visible
+        $this->iWaitSeconds(1);
         $button = $element->find($selector, $locator);
         if (!is_null($button)) {
             $button->click();

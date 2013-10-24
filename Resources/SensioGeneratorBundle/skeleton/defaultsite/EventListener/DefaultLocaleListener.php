@@ -2,14 +2,17 @@
 
 namespace {{ namespace }}\EventListener;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpFoundation\Request;
 
-use Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\HttpKernel\Event\FilterResponseEvent,
-    Symfony\Component\HttpFoundation\Request;
-
-class DefaultLocaleListener {
-
+class DefaultLocaleListener
+{
+    /**
+     * @var string
+     */
     private $defaultLocale;
+
     public function __construct($defaultLocale)
     {
         $this->defaultLocale = $defaultLocale;
@@ -20,12 +23,13 @@ class DefaultLocaleListener {
      *
      * @param FilterResponseEvent $event
      */
-    public function onKernelResponse(FilterResponseEvent $event) {
+    public function onKernelResponse(FilterResponseEvent $event)
+    {
         $request = $event->getRequest();
         $response = $event->getResponse();
 
         // When we're on root and it's NOT succesful, redirect to the root for the defaultLocale.
-        if (($this->isRootUrl($request)) && !$response->isSuccessful()) {
+        if (($this->isRootUrl($request)) && !$response->isSuccessful() && !$response->isRedirection()) {
             $response = new RedirectResponse($request->getBaseUrl() . '/' . $this->defaultLocale);
             $event->setResponse($response);
         }
@@ -36,6 +40,4 @@ class DefaultLocaleListener {
         $url = $request->getPathInfo();
         return (empty($url) || ($url == '/'));
     }
-
-
 }

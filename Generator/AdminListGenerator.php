@@ -125,6 +125,10 @@ class AdminListGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Genera
         $className = sprintf("%sAdminListController", $entityName);
         $dirPath = sprintf("%s/Controller", $bundle->getPath());
         $classPath = sprintf("%s/%s.php", $dirPath, str_replace('\\', '/', $className));
+        $extensions = 'csv';
+        if (class_exists("\\Kunstmaan\\AdminListBundle\\Service\\ExportService")) {
+            $extensions = implode('|', \Kunstmaan\AdminListBundle\Service\ExportService::getSupportedExtensions());
+        }
 
         if (file_exists($classPath)) {
             throw new \RuntimeException(sprintf('Unable to generate the %s class as it already exists under the %s file', $className, $classPath));
@@ -135,6 +139,7 @@ class AdminListGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Genera
             'namespace'         => $bundle->getNamespace(),
             'bundle'            => $bundle,
             'entity_class'      => $entityName,
+            'export_extensions' => $extensions
         ));
 
     }
@@ -201,8 +206,11 @@ class AdminListGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Genera
             $type = $metadata->getTypeOfField($fieldName);
             $filterType = isset($mapping[$type]) ? $mapping[$type] : null;
 
+            preg_match_all('/((?:^|[A-Z])[a-z]+)/', $fieldName, $matches);
+            $fieldTitle = ucfirst(strtolower(implode(' ', $matches[0])));
+
             if (!is_null($filterType)) {
-                $fields[$fieldName] = $filterType;
+                $fields[$fieldName] = array('filterType' => $filterType, 'fieldTitle' => $fieldTitle);
             }
         }
 

@@ -32,7 +32,7 @@ Feature: AdminPage
   @javascript
   Scenario: Navigate to the page
     Given I go to page "/contentsubpage"
-    Then I should see "page you requested could not be found"
+    Then the response status code should be 404
 
   @javascript
   Scenario: Publish the page

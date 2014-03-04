@@ -64,6 +64,25 @@ EOT
     {
         $this->assistant->writeSection('Site generation');
 
+        $this->assistant->writeLine(array("This command helps you to generate a default site setup.\n"));
+
+        /**
+         * Ask for which bundle we need to create the layout
+         */
+        $bundleNamespace = $this->assistant->getOptionOrDefault('namespace', null);
+        $this->bundle = $this->askForBundleName('layout', $bundleNamespace);
+
+
+        /**
+         * Ask the database table prefix
+         */
+        $this->prefix = $this->askForPrefix(null, $this->bundle->getNamespace());
+
+        /**
+         * If we need to generate a full site, or only the basic structure
+         */
+        $this->demosite = $this->assistant->getOption('demosite');
+
         // First we generate the layout if it is not yet generated
         if (!is_file($this->bundle->getPath().'/Resources/views/Layout/layout.html.twig')) {
             $command = $this->getApplication()->find('kuma:generate:layout');
@@ -94,23 +113,6 @@ EOT
      */
     protected function doInteract()
     {
-        $this->assistant->writeLine(array("This command helps you to generate a default site setup.\n"));
-
-        /**
-         * Ask for which bundle we need to create the layout
-         */
-        $bundleNamespace = $this->assistant->getOptionOrDefault('namespace', null);
-        $this->bundle = $this->askForBundleName('layout', $bundleNamespace);
-
-        /**
-         * Ask the database table prefix
-         */
-        $this->prefix = $this->askForPrefix(null, $this->bundle->getNamespace());
-
-        /**
-         * If we need to generate a full site, or only the basic structure
-         */
-        $this->demosite = $this->assistant->getOption('demosite');
     }
 
     /**

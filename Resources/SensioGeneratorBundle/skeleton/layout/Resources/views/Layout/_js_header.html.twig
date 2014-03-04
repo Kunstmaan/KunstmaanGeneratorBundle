@@ -1,7 +1,3 @@
-    {% javascripts
-        '@<%= bundle.getName() %>/Resources/public/vendor/modernizr/modernizr-custom.js'
-        filter='yui_js'
-        output='frontend/header.js'
-    %}
-        <script src='{{ asset_url }}'></script>
-    {% endjavascripts %}
+<!--[if lt IE 9]>
+    <script src='/vendor/html5shiv/dist/html5shiv.js?{{ assets_version() }}'></script>
+<![endif]-->

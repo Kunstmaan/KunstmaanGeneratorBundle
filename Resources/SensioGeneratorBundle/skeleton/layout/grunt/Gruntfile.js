@@ -65,7 +65,7 @@ module.exports = function (grunt) {
         cmq: {
             {{ bundle.getName() }}: {
                 files: {
-                    'web/frontend/.temp/css/': 'web/frontend/.temp/css/style.css'
+                    'web/frontend/.temp/css/': 'web/frontend/css/style.css'
                 }
             }
         },

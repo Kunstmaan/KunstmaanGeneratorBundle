@@ -667,4 +667,16 @@ abstract class KunstmaanGenerateCommand extends GenerateDoctrineCommand
 
         return $fields;
     }
+
+    /**
+     * Fix php 5.3.x compatibility in closure
+     *
+     * @param string $method
+     * @param array $args
+     * @return mixed
+     */
+    public function __call($method, $args = array())
+    {
+        return call_user_func_array(array($this, $method), $args);
+    }
 }

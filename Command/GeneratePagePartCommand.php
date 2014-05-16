@@ -131,7 +131,7 @@ EOT
                 }
 
                 // Check that entity does not already exist
-                if (file_exists($self->bundle->getPath().'/Entity/PageParts/'.$name.'.php')) {
+                if (file_exists($self->getBundle()->getPath().'/Entity/PageParts/'.$name.'.php')) {
                     throw new \InvalidArgumentException(sprintf('PagePart or entity "%s" already exists', $name));
                 }
 
@@ -185,4 +185,13 @@ EOT
         return new PagePartGenerator($filesystem, $registry, '/pagepart', $this->assistant, $this->getContainer());
     }
 
+    /**
+     * Get the bundle (need for php 5.3.x in closure)
+     *
+     * @return BundleInterface
+     */
+    protected function getBundle()
+    {
+        return $this->bundle;
+    }
 }

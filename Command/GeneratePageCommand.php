@@ -150,7 +150,7 @@ EOT
                 }
 
                 // Check that entity does not already exist
-                if (file_exists($self->bundle->getPath().'/Entity/Pages/'.$name.'.php')) {
+                if (file_exists($self->getBundle()->getPath().'/Entity/Pages/'.$name.'.php')) {
                     throw new \InvalidArgumentException(sprintf('Page or entity "%s" already exists', $name));
                 }
 
@@ -314,5 +314,15 @@ EOT
         );
 
         return $configs;
+    }
+
+    /**
+     * Get the bundle (need for php 5.3.x in closure)
+     *
+     * @return BundleInterface
+     */
+    protected function getBundle()
+    {
+        return $this->bundle;
     }
 }

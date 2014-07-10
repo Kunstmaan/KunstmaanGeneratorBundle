@@ -52,8 +52,6 @@ class {{ entity_class }}PageRepository extends AbstractArticlePageRepository
         $query .= " INNER JOIN";
         $query .= " kuma_nodes n ON n.id = nt.node_id";
         $query .= " WHERE";
-        $query .= " n.deleted = 0";
-        $query .= " AND";
         $query .= " n.ref_entity_name = '{{ namespace | replace({'\\': '\\\\\\\\'}) }}\\\\Entity\\\\{{ entity_class }}\\\\{{ entity_class }}Page'";
         $query .= " AND";
         $query .= " nt.online = 1 ";

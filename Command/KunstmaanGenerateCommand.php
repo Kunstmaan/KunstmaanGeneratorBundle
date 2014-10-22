@@ -92,22 +92,22 @@ abstract class KunstmaanGenerateCommand extends GenerateDoctrineCommand
      *
      * @return array
      */
-    protected function getOwnBundles()
+    protected function getOwnBundles($depth = 1)
     {
         $bundles = array();
         $counter = 1;
 
         $dir = dirname($this->getContainer()->getParameter('kernel.root_dir').'/').'/src/';
         $finder = new Finder();
-        $finder->directories()->in($dir)->depth('== 1');
+        $finder->directories()->in($dir)->depth(sprintf('== %s', $depth));
         foreach ($finder as $file) {
             $bundles[$counter++] = array(
-                'name'      => $file->getRelativePath().$file->getFileName(),
+                'name'      => str_replace(DIRECTORY_SEPARATOR, '', $file->getRelativePath().$file->getFileName()),
                 'namespace' => $file->getRelativePath().'\\'.$file->getFileName(),
                 'dir'       => $file->getPathname()
             );
         }
-
+        
         return $bundles;
     }
 
@@ -201,7 +201,9 @@ abstract class KunstmaanGenerateCommand extends GenerateDoctrineCommand
      */
     protected function askForBundleName($objectName, $namespace = null)
     {
-        $ownBundles = $this->getOwnBundles();
+        $depth = $this->assistant->ask('Specify depth for scanning bundles from src/ folder', 1);
+        
+        $ownBundles = $this->getOwnBundles($depth);
         if (count($ownBundles) <= 0) {
             $this->assistant->writeError("Looks like you don't have created any bundles for your project...", true);
         }

@@ -85,7 +85,7 @@ EOT
             }
         }
 
-        GeneratorUtils::ensureOptionsProvided($input, array('entity', 'fields', 'prefix'));
+        GeneratorUtils::ensureOptionsProvided($input, array('entity', 'fields'));
 
         $entityInput = Validators::validateEntityName($input->getOption('entity'));
         list($bundleName, $entity) = $this->parseShortcutNotation($entityInput);

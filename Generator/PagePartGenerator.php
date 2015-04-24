@@ -76,7 +76,7 @@ class PagePartGenerator extends KunstmaanGenerator
      */
     private function generatePagePartEntity()
     {
-	if ($this->bundle->getPath().'/Entity/PageParts/AbstractPagePart.php') {
+	if (file_exists($this->bundle->getPath().'/Entity/PageParts/AbstractPagePart.php')) {
 	    $abstractClass = $this->bundle->getNamespace().'\Entity\PageParts\AbstractPagePart';
 	} else {
 	    $abstractClass = 'Kunstmaan\PagePartBundle\Entity\AbstractPagePart';

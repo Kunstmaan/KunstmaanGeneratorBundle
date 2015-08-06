@@ -1,30 +1,31 @@
+{% block content %}
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-        {% if pagerfanta is defined %}
-            {% set searchResults = pagerfanta.currentPageResults() %}
-            {% set facets = pagerfanta.getAdapter().getFacets() %}
-            {% if facets is not empty %}
-                {% if facets['type']['terms'] is defined and facets['type']['terms']|length > 0 %}
-                    <p>{{ 'search.filter'|trans }}</p>
-                    <ul class="list-reset">
-                    {% for type in facets['type']['terms'] %}
-                        <li>
-                            {% if type['term'] != q_type %}
-                                <a href="?query={{ q_query }}&amp;type={{ type['term'] }}">
-                            {% endif %}
-                            {{ type['term'] }}
-                            {% if type['term'] != q_type %}
-                                ({{ type['count'] }})</a>
-                            {% else %}
-                                <a href="?query={{ q_query }}">(-)</a>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                    </ul>
+            {% if pagerfanta is defined %}
+                {% set searchResults = pagerfanta.currentPageResults() %}
+                {% set facets = pagerfanta.getAdapter().getFacets() %}
+                {% if facets is not empty %}
+                    {% if facets['type']['terms'] is defined and facets['type']['terms']|length > 0 %}
+                        <p>{{ 'search.filter'|trans }}</p>
+                        <ul class="list-reset">
+                            {% for type in facets['type']['terms'] %}
+                                <li>
+                                {% if type['term'] != q_type %}
+                                    <a href="?query={{ q_query }}&amp;type={{ type['term'] }}">
+                                        {% endif %}
+                                        {{ type['term'] }}
+                                        {% if type['term'] != q_type %}
+                                        ({{ type['count'] }})</a>
+                                {% else %}
+                                    <a href="?query={{ q_query }}">(-)</a>
+                                {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 {% endif %}
             {% endif %}
-        {% endif %}
         </div>
 
         <div class="col-md-9 col--padded">
@@ -79,3 +80,4 @@
         </div>
     </div>
 </div>
+{% endblock %}

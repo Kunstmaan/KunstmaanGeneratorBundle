@@ -83,7 +83,7 @@ EOT
             $bundle = strtr($namespace, array('\\' => ''));
         }
         $bundle = Validators::validateBundleName($bundle);
-        $dir = Validators::validateTargetDir($input->getOption('dir'), $bundle, $namespace);
+        $dir = $input->getOption('dir');
         $format = 'yml';
 
         $questionHelper->writeSection($output, 'Bundle generation');
@@ -162,7 +162,7 @@ EOT
         $output->writeln(array('', 'The bundle can be generated anywhere. The suggested default directory uses', 'the standard conventions.', '',));
         $question = new Question($questionHelper->getQuestion('Target directory', $dir), $dir);
         $question->setValidator(function ($dir) use ($bundle, $namespace) {
-            return Validators::validateTargetDir($dir, $bundle, $namespace);
+            return $dir;
         });
         $dir = $questionHelper->ask($input, $output, $question);
         $input->setOption('dir', $dir);
